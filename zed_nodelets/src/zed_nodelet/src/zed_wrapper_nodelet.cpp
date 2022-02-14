@@ -433,7 +433,7 @@ void ZEDWrapperNodelet::onInit()
   mPubRgb = it_zed.advertiseCamera(rgb_topic, 1);  // rgb
   NODELET_INFO_STREAM("Advertised on topic " << mPubRgb.getTopic());
   NODELET_INFO_STREAM("Advertised on topic " << mPubRgb.getInfoTopic());
-  mPubRawRgb = it_zed.advertiseCamera(rgb_raw_topic, 1);  // rgb raw
+  /*mPubRawRgb = it_zed.advertiseCamera(rgb_raw_topic, 1);  // rgb raw
   NODELET_INFO_STREAM("Advertised on topic " << mPubRawRgb.getTopic());
   NODELET_INFO_STREAM("Advertised on topic " << mPubRawRgb.getInfoTopic());
   mPubLeft = it_zed.advertiseCamera(left_topic, 1);  // left
@@ -484,11 +484,11 @@ void ZEDWrapperNodelet::onInit()
   // Disparity publisher
   mPubDisparity = mNhNs.advertise<stereo_msgs::DisparityImage>(disparityTopic, static_cast<int>(mVideoDepthFreq));
   NODELET_INFO_STREAM("Advertised on topic " << mPubDisparity.getTopic());
-
+  */
   // PointCloud publishers
   mPubCloud = mNhNs.advertise<sensor_msgs::PointCloud2>(pointcloud_topic, 1);
   NODELET_INFO_STREAM("Advertised on topic " << mPubCloud.getTopic());
-
+  /*
   if (mMappingEnabled)
   {
     mPubFusedCloud = mNhNs.advertise<sensor_msgs::PointCloud2>(pointcloud_fused_topic, 1);
@@ -501,7 +501,7 @@ void ZEDWrapperNodelet::onInit()
     mPubObjDet = mNhNs.advertise<zed_interfaces::ObjectsStamped>(object_det_topic, 1);
     NODELET_INFO_STREAM("Advertised on topic " << mPubObjDet.getTopic());
   }
-
+  */
   // Odometry and Pose publisher
   mPubPose = mNhNs.advertise<geometry_msgs::PoseStamped>(poseTopic, 1);
   NODELET_INFO_STREAM("Advertised on topic " << mPubPose.getTopic());
@@ -517,8 +517,8 @@ void ZEDWrapperNodelet::onInit()
   {
     mPubOdomPath = mNhNs.advertise<nav_msgs::Path>(odom_path_topic, 1, true);
     NODELET_INFO_STREAM("Advertised on topic " << mPubOdomPath.getTopic());
-    mPubMapPath = mNhNs.advertise<nav_msgs::Path>(map_path_topic, 1, true);
-    NODELET_INFO_STREAM("Advertised on topic " << mPubMapPath.getTopic());
+    //mPubMapPath = mNhNs.advertise<nav_msgs::Path>(map_path_topic, 1, true);
+    //NODELET_INFO_STREAM("Advertised on topic " << mPubMapPath.getTopic());
 
     mPathTimer = mNhNs.createTimer(ros::Duration(1.0 / mPathPubRate), &ZEDWrapperNodelet::callback_pubPath, this);
 
@@ -550,18 +550,18 @@ void ZEDWrapperNodelet::onInit()
     if (mZedRealCamModel == sl::MODEL::ZED2 || mZedRealCamModel == sl::MODEL::ZED2i)
     {
       // IMU temperature sensor
-      mPubImuTemp = mNhNs.advertise<sensor_msgs::Temperature>(imu_temp_topic, 1 /*static_cast<int>(mSensPubRate)*/);
-      NODELET_INFO_STREAM("Advertised on topic " << mPubImuTemp.getTopic());
+      //mPubImuTemp = mNhNs.advertise<sensor_msgs::Temperature>(imu_temp_topic, 1 /*static_cast<int>(mSensPubRate)*/);
+      //NODELET_INFO_STREAM("Advertised on topic " << mPubImuTemp.getTopic());
 
       // Atmospheric pressure
-      mPubPressure = mNhNs.advertise<sensor_msgs::FluidPressure>(pressure_topic, 1 /*static_cast<int>(BARO_FREQ)*/);
-      NODELET_INFO_STREAM("Advertised on topic " << mPubPressure.getTopic());
+      //mPubPressure = mNhNs.advertise<sensor_msgs::FluidPressure>(pressure_topic, 1 /*static_cast<int>(BARO_FREQ)*/);
+      //NODELET_INFO_STREAM("Advertised on topic " << mPubPressure.getTopic());
 
       // CMOS sensor temperatures
       mPubTempL = mNhNs.advertise<sensor_msgs::Temperature>(temp_topic_left, 1 /*static_cast<int>(BARO_FREQ)*/);
       NODELET_INFO_STREAM("Advertised on topic " << mPubTempL.getTopic());
-      mPubTempR = mNhNs.advertise<sensor_msgs::Temperature>(temp_topic_right, 1 /*static_cast<int>(BARO_FREQ)*/);
-      NODELET_INFO_STREAM("Advertised on topic " << mPubTempR.getTopic());
+      //mPubTempR = mNhNs.advertise<sensor_msgs::Temperature>(temp_topic_right, 1 /*static_cast<int>(BARO_FREQ)*/);
+      //NODELET_INFO_STREAM("Advertised on topic " << mPubTempR.getTopic());
     }
 
     // Publish camera imu transform in a latched topic
@@ -609,7 +609,7 @@ void ZEDWrapperNodelet::onInit()
   mSrvSetInitPose = mNhNs.advertiseService("set_pose", &ZEDWrapperNodelet::on_set_pose, this);
   mSrvResetOdometry = mNhNs.advertiseService("reset_odometry", &ZEDWrapperNodelet::on_reset_odometry, this);
   mSrvResetTracking = mNhNs.advertiseService("reset_tracking", &ZEDWrapperNodelet::on_reset_tracking, this);
-  mSrvSvoStartRecording =
+  /*mSrvSvoStartRecording =
       mNhNs.advertiseService("start_svo_recording", &ZEDWrapperNodelet::on_start_svo_recording, this);
   mSrvSvoStopRecording = mNhNs.advertiseService("stop_svo_recording", &ZEDWrapperNodelet::on_stop_svo_recording, this);
 
@@ -627,7 +627,7 @@ void ZEDWrapperNodelet::onInit()
   mSrvStopObjDet = mNhNs.advertiseService("stop_object_detection", &ZEDWrapperNodelet::on_stop_object_detection, this);
 
   mSrvSaveAreaMemory = mNhNs.advertiseService("save_area_memory", &ZEDWrapperNodelet::on_save_area_memory, this);
-
+  */
   // Start Pointcloud thread
   mPcThread = std::thread(&ZEDWrapperNodelet::pointcloud_thread_func, this);
 
@@ -3564,8 +3564,9 @@ void ZEDWrapperNodelet::device_poll_thread_func()
     uint32_t leftGrayRawSubnumber = mPubRawLeftGray.getNumSubscribers();
     uint32_t rightGraySubnumber = mPubRightGray.getNumSubscribers();
     uint32_t rightGrayRawSubnumber = mPubRawRightGray.getNumSubscribers();
-    uint32_t depthSubnumber = mPubDepth.getNumSubscribers();
+    uint32_t depthSubnumber = mPubDepth.getNumSubscribers();    
     uint32_t disparitySubnumber = mPubDisparity.getNumSubscribers();
+    
     uint32_t cloudSubnumber = mPubCloud.getNumSubscribers();
     uint32_t fusedCloudSubnumber = mPubFusedCloud.getNumSubscribers();
     uint32_t poseSubnumber = mPubPose.getNumSubscribers();
@@ -3587,7 +3588,7 @@ void ZEDWrapperNodelet::device_poll_thread_func()
         ((rgbSubnumber + rgbRawSubnumber + leftSubnumber + leftRawSubnumber + rightSubnumber + rightRawSubnumber +
           rgbGraySubnumber + rgbGrayRawSubnumber + leftGraySubnumber + leftGrayRawSubnumber + rightGraySubnumber +
           rightGrayRawSubnumber + depthSubnumber + disparitySubnumber + cloudSubnumber + poseSubnumber +
-          poseCovSubnumber + odomSubnumber + confMapSubnumber /*+ imuSubnumber + imuRawsubnumber*/ + pathSubNumber +
+          poseCovSubnumber + odomSubnumber + confMapSubnumber + /*imuSubnumber + imuRawsubnumber+*/ pathSubNumber +
           stereoSubNumber + stereoRawSubNumber + objDetSubnumber) > 0);
 
     // Run the loop only if there is some subscribers or SVO is active
@@ -3625,7 +3626,7 @@ void ZEDWrapperNodelet::device_poll_thread_func()
       // Detect if one of the subscriber need to have the depth information
       mComputeDepth = mDepthMode != sl::DEPTH_MODE::NONE &&
                       (computeTracking ||
-                       ((depthSubnumber + disparitySubnumber + cloudSubnumber + fusedCloudSubnumber + poseSubnumber +
+                       ((/*depthSubnumber + disparitySubnumber */+ cloudSubnumber + fusedCloudSubnumber + poseSubnumber +
                          poseCovSubnumber + odomSubnumber + confMapSubnumber + objDetSubnumber) > 0));
 
       if (mComputeDepth)
